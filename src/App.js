@@ -1,19 +1,38 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import calculate from "./logic/calculate.js";
 import './App.css';
 
 class Display extends React.Component{
-  
-}
-
-class Button extends Reac.Component {
-
-}
-class ButtonPanel extends React.Component{
-   
   render() {
     return (
-      <div>
+      <div className="component-display">
+        <div>{this.props.value}</div>
+      </div>
+    );
+    } 
+}
+
+class Button extends React.Component {
+   
+   handleClick = () => {
+     this.props.clickHandler(this.props.name);
+    }
+  render() {
+    return (
+      <div className='component-button'>
+        <button onClick={this.handleClick}>{this.props.name}</button>
+      </div>
+    );
+  }
+}
+class ButtonPanel extends React.Component{
+    
+  handleClick = (name) => {
+    this.props.handleClick(name);
+  }
+  render() {
+    return (
+      <div className='component-button-panel'>
         <div>
           <Button name="AC" clickHandler={this.handleClick} />
           <Button name="+/-" clickHandler={this.handleClick} />
@@ -50,11 +69,20 @@ class ButtonPanel extends React.Component{
 
 
 class App extends Component {
+  state = {
+    total: null,
+    next: null,
+    operation: null,
+  };
+  
+  handleClick = (name) => {
+    this.setState(calculate(this.state,name));
+  }
   render() {
     return (
       <div>
-        <Display></Display>
-        <ButtonPanel></ButtonPanel>
+        <Display value={this.state.next||this.state.total||"0"}></Display>
+        <ButtonPanel handleClick={this.handleClick}></ButtonPanel>
       </div>
     );
   }
